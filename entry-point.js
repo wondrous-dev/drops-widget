@@ -1,5 +1,4 @@
-console.log('test');
-const handleInit = () => {
+(function (window) {
   let e = document.createElement('iframe'),
     t = document.getElementById('drops-widget-script'),
     d = t.getAttribute('data-drops-widget');
@@ -19,8 +18,7 @@ const handleInit = () => {
     (l.style.transform = 'translate(-50%, 0)'),
     l.appendChild(e),
     document.body.appendChild(l);
-};
-handleInit();
+})(window);
 
 /*
     USAGE: 
