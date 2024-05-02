@@ -1,3 +1,4 @@
+console.log('test');
 const handleInit = () => {
   let e = document.createElement('iframe'),
     t = document.getElementById('drops-widget-script'),
