@@ -48,6 +48,7 @@ const renderIframe = (url, container) => {
 
   if (iframeExists) {
     container.style.display = 'block';
+    container.style.zIndex = 100;
     return;
   }
   const iframe = document.createElement('iframe');
@@ -66,17 +67,21 @@ const renderIframe = (url, container) => {
   container.appendChild(iframe);
 };
 
-const removeIframe = (container) => {
+const hideIframeContainer = (container) => {
   const iframe = document.querySelector('#drops-widget-iframe');
   if (iframe) {
     container.style.display = 'none';
-
+    container.style.zIndex = 0;
     document.body.style.overflow = 'auto';
     document.body.style.height = 'auto';
   }
 };
 
-const createCloseWidgetButton = (button) => {
+const createCloseWidgetButton = ({
+  button,
+  hideIframeContainer,
+  setIsIframeRendered,
+}) => {
   const closeButton = document.createElement('button');
   closeButton.style.height = '16px';
   closeButton.style.width = '16px';
@@ -110,17 +115,21 @@ const createCloseWidgetButton = (button) => {
       sessionStorage.setItem('drops-widget-closed', 'true');
     } else {
       container.style.display = 'none';
+      container.style.zIndex = 0;
       document.body.style.overflow = 'auto';
       document.body.style.height = 'auto';
+      hideIframeContainer(container);
+      setIsIframeRendered();
     }
   });
   button.appendChild(closeButton);
 };
 
-const createButtonElement = () => {
+const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   const button = document.createElement('button');
 
   button.style.position = 'fixed';
+  button.style.zIndex = 101;
   button.style.top = 'calc(100% - 100px)';
   button.style.left = 'calc(100% - 180px)';
   button.style.borderRadius = '6px';
@@ -145,27 +154,32 @@ const createButtonElement = () => {
   button.style.justifyContent = 'center';
   button.style.alignItems = 'center';
   button.style.gap = '10px';
-  createCloseWidgetButton(button);
+  createCloseWidgetButton({ button, hideIframeContainer, setIsIframeRendered });
   return button;
 };
 
-const handleButton = ({ isIframeRendered, container }) => {
-  const button = createButtonElement();
+const handleButton = ({ container }) => {
+  let isIframeRendered = false;
+  const setIsIframeRendered = () => (isIframeRendered = !isIframeRendered);
+  const button = createButtonElement({
+    hideIframeContainer,
+    setIsIframeRendered,
+  });
 
   detectClickOutside(container, button, () => {
     isIframeRendered = !isIframeRendered;
-    removeIframe(container);
+    hideIframeContainer(container);
   });
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(isIframeRendered, 'isiframe rendered');
     if (isIframeRendered) {
-      removeIframe(container);
+      hideIframeContainer(container);
     } else {
       const iframe = document.querySelector('#drops-widget-iframe');
       if (iframe) {
         container.style.display = 'block';
+        container.style.zIndex = 100;
         document.body.style.overflow = 'hidden';
         document.body.style.height = '100vh';
       }
@@ -178,13 +192,13 @@ const handleButton = ({ isIframeRendered, container }) => {
 };
 
 const renderWidget = () => {
-  let isIframeRendered = false;
   const script = document.getElementById('drops-widget-script');
 
   const container = document.createElement('div');
   container.style.overflow = 'hidden';
   container.id = 'drops-widget-container';
   container.style.display = 'none';
+  container.style.zIndex = 0;
   const url = script.getAttribute('data-drops-widget');
   document.body.appendChild(container);
   renderIframe(url, container);
@@ -193,7 +207,7 @@ const renderWidget = () => {
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
   );
   setTimeout(() => {
-    handleButton({ isIframeRendered, container });
+    handleButton({ container });
   }, 1000);
 };
 
