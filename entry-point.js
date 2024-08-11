@@ -120,10 +120,6 @@ const createCloseWidgetButton = (button) => {
 const createButtonElement = () => {
   const button = document.createElement('button');
 
-  document.head.insertAdjacentHTML(
-    'beforeend',
-    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
-  );
   button.style.position = 'fixed';
   button.style.top = 'calc(100% - 100px)';
   button.style.left = 'calc(100% - 180px)';
@@ -192,6 +188,10 @@ const renderWidget = () => {
   const url = script.getAttribute('data-drops-widget');
   document.body.appendChild(container);
   renderIframe(url, container);
+  document.head.insertAdjacentHTML(
+    'beforeend',
+    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
+  );
   setTimeout(() => {
     handleButton({ isIframeRendered, container });
   }, 1000);
