@@ -92,6 +92,7 @@ const createCloseWidgetButton = (button) => {
   closeButton.style.justifyContent = 'center';
   closeButton.style.alignItems = 'center';
   closeButton.style.border = '1px solid #000';
+  closeButton.style.color = '#000';
   closeButton.onmouseover = () => {
     closeButton.style.backgroundColor = '#000';
     closeButton.style.color = '#FFF';
@@ -152,18 +153,9 @@ const createButtonElement = () => {
   return button;
 };
 
-const renderWidget = () => {
-  let isIframeRendered = false;
-  const script = document.getElementById('drops-widget-script');
-
-  const container = document.createElement('div');
-  container.style.overflow = 'hidden';
-  container.id = 'drops-widget-container';
-  container.style.display = 'none';
-  const url = script.getAttribute('data-drops-widget');
-  document.body.appendChild(container);
-  renderIframe(url, container);
+const handleButton = ({ isIframeRendered, container }) => {
   const button = createButtonElement();
+
   detectClickOutside(container, button, () => {
     isIframeRendered = !isIframeRendered;
     removeIframe(container);
@@ -187,6 +179,22 @@ const renderWidget = () => {
 
   button.addEventListener('click', handleClick);
   document.body.appendChild(button);
+};
+
+const renderWidget = () => {
+  let isIframeRendered = false;
+  const script = document.getElementById('drops-widget-script');
+
+  const container = document.createElement('div');
+  container.style.overflow = 'hidden';
+  container.id = 'drops-widget-container';
+  container.style.display = 'none';
+  const url = script.getAttribute('data-drops-widget');
+  document.body.appendChild(container);
+  renderIframe(url, container);
+  setTimeout(() => {
+    handleButton({ isIframeRendered, container });
+  }, 1000);
 };
 
 renderWidget();
