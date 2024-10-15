@@ -98,6 +98,8 @@ const createCloseWidgetButton = ({
   closeButton.style.alignItems = 'center';
   closeButton.style.border = '1px solid #000';
   closeButton.style.color = '#000';
+  closeButton.style.position = 'absolute';
+  closeButton.style.right = '5px';
   closeButton.onmouseover = () => {
     closeButton.style.backgroundColor = '#000';
     closeButton.style.color = '#FFF';
@@ -131,24 +133,25 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   button.style.position = 'fixed';
   button.style.zIndex = 101;
   button.style.top = 'calc(100% - 100px)';
-  button.style.left = 'calc(100% - 180px)';
+  button.style.left = 'calc(100% - 260px)';
   button.style.borderRadius = '6px';
   button.style.border = '1px solid #000';
   button.style.backgroundColor = '#FFF';
   button.style.boxShadow = '0px 4px 4px 0px rgba(0, 0, 0, 0.25)';
-  button.style.maxWidth = '155px';
-  button.style.height = '48px';
+  button.style.maxWidth = '210px';
+  button.style.height = '68px';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
   button.style.alignItems = 'center';
   button.style.cursor = 'pointer';
+  button.style.lineHeight = '20px';
   button.style.whiteSpace = 'nowrap';
   button.style.color = '#000';
-  button.style.fontFamily = 'Jost, sans-serif';
-  button.style.fontStyle = 'italic';
+  button.style.fontFamily = 'Libre Baskerville, serif';
   button.style.fontWeight = '800';
-  button.style.fontSize = '15px';
-  button.innerText = 'ENTER TO WIN';
+  button.style.fontSize = '14px';
+  button.style.textAlign = 'center';
+  button.innerText = 'Enter to win a \n Sun Catcher Set 🌈';
   button.style.width = '100%';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
@@ -204,7 +207,7 @@ const renderWidget = () => {
   renderIframe(url, container);
   document.head.insertAdjacentHTML(
     'beforeend',
-    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
+    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">'
   );
   setTimeout(() => {
     handleButton({ container });
