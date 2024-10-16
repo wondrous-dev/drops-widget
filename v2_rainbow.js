@@ -56,6 +56,7 @@ const renderIframe = (url, container) => {
   container.style.position = 'fixed';
   container.style.top = '0';
   container.style.left = '0';
+
   iframe.src = url;
   container.style.width = '100vw';
   container.style.height = '100vh';
@@ -98,7 +99,8 @@ const createCloseWidgetButton = ({
   closeButton.style.border = '1px solid #000';
   closeButton.style.color = '#000';
   closeButton.style.position = 'absolute';
-  closeButton.style.right = '5px';
+  closeButton.style.right = '10px';
+  closeButton.style.marginLeft = '20px';
   closeButton.onmouseover = () => {
     closeButton.style.backgroundColor = '#000';
     closeButton.style.color = '#FFF';
@@ -132,12 +134,12 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   button.style.position = 'fixed';
   button.style.zIndex = 101;
   button.style.top = 'calc(100% - 100px)';
-  button.style.left = 'calc(100% - 260px)';
+  button.style.left = 'calc(100% - 320px)';
   button.style.borderRadius = '6px';
   button.style.border = '1px solid #000';
   button.style.backgroundColor = '#FFF';
   button.style.boxShadow = '0px 4px 4px 0px rgba(0, 0, 0, 0.25)';
-  button.style.maxWidth = '210px';
+  button.style.maxWidth = '310px';
   button.style.height = '68px';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
@@ -150,10 +152,11 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   button.style.fontWeight = '800';
   button.style.fontSize = '14px';
   button.style.textAlign = 'center';
-  button.innerText = 'Enter to win a \n Sun Catcher Set 🌈';
+  button.innerText = 'Enter to win a Sun Catcher Set 🌈';
   button.style.width = '100%';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
+  button.style.paddingRight = '30px';
   button.style.alignItems = 'center';
   button.style.gap = '10px';
   createCloseWidgetButton({ button, hideIframeContainer, setIsIframeRendered });
@@ -208,7 +211,6 @@ const renderWidget = () => {
     'beforeend',
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">'
   );
-
   const origin = new URL(url).origin;
 
   window.addEventListener('message', (event) => {
@@ -218,6 +220,7 @@ const renderWidget = () => {
       newWindow.location.href = event.data.url;
     }
   });
+
   setTimeout(() => {
     handleButton({ container });
   }, 1000);
