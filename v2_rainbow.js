@@ -99,7 +99,7 @@ const createCloseWidgetButton = ({
   closeButton.style.border = '1px solid #000';
   closeButton.style.color = '#000';
   closeButton.style.position = 'absolute';
-  closeButton.style.right = '10px';
+  closeButton.style.right = '15px';
   closeButton.style.marginLeft = '20px';
   closeButton.onmouseover = () => {
     closeButton.style.backgroundColor = '#000';
@@ -134,12 +134,12 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   button.style.position = 'fixed';
   button.style.zIndex = 101;
   button.style.top = 'calc(100% - 100px)';
-  button.style.left = 'calc(100% - 320px)';
+  button.style.left = 'calc(100% - 400px)';
   button.style.borderRadius = '6px';
   button.style.border = '1px solid #000';
   button.style.backgroundColor = '#FFF';
   button.style.boxShadow = '0px 4px 4px 0px rgba(0, 0, 0, 0.25)';
-  button.style.maxWidth = '310px';
+  button.style.maxWidth = '380px';
   button.style.height = '68px';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
@@ -152,7 +152,7 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
   button.style.fontWeight = '800';
   button.style.fontSize = '14px';
   button.style.textAlign = 'center';
-  button.innerText = 'Enter to win a Sun Catcher Set 🌈';
+  button.innerText = 'Enter to win 4 Sun Catchers of your choice';
   button.style.width = '100%';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
@@ -180,9 +180,18 @@ const handleButton = ({ container }) => {
     e.preventDefault();
     if (isIframeRendered) {
       hideIframeContainer(container);
+      button.innerText = 'Enter to win 4 Sun Catchers of your choice';
+      button.style.width = '380px';
+      button.style.left = 'calc(100% - 400px)';
+      button.style.paddingRight = '30px';
+      createCloseWidgetButton({ button, hideIframeContainer, setIsIframeRendered });
     } else {
       const iframe = document.querySelector('#drops-widget-iframe');
       if (iframe) {
+        button.innerText = 'Take me back to the shop';
+        button.style.width = '250px';
+        button.style.left = 'calc(100% - 280px)';
+        button.style.paddingRight = '0px';
         container.style.display = 'block';
         container.style.zIndex = 100;
         document.body.style.overflow = 'hidden';
