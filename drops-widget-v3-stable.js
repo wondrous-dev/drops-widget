@@ -1,3 +1,5 @@
+const isMobile = window.innerWidth <= 768;
+
 const closeIcon = () => {
   const node = document.createElement('svg');
   node.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
@@ -98,6 +100,9 @@ const createCloseWidgetButton = ({
   closeButton.style.alignItems = 'center';
   closeButton.style.border = '1px solid #000';
   closeButton.style.color = '#000';
+  closeButton.style.position = 'absolute';
+  closeButton.style.right = '15px';
+  closeButton.style.marginLeft = '20px';
   closeButton.onmouseover = () => {
     closeButton.style.backgroundColor = '#000';
     closeButton.style.color = '#FFF';
@@ -130,28 +135,32 @@ const createButtonElement = ({ hideIframeContainer, setIsIframeRendered }) => {
 
   button.style.position = 'fixed';
   button.style.zIndex = 101;
-  button.style.top = 'calc(100% - 100px)';
-  button.style.left = 'calc(100% - 180px)';
+  button.style.top = 'calc(100% - 90px)';
+  button.style.left = isMobile ? 'calc(100% - 345px)' : 'calc(100% - 475px)';
   button.style.borderRadius = '6px';
   button.style.border = '1px solid #000';
   button.style.backgroundColor = '#FFF';
   button.style.boxShadow = '0px 4px 4px 0px rgba(0, 0, 0, 0.25)';
-  button.style.maxWidth = '155px';
-  button.style.height = '48px';
+  button.style.maxWidth = isMobile ? '250px' : '380px';
+  button.style.height = '68px';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
   button.style.alignItems = 'center';
   button.style.cursor = 'pointer';
+  button.style.lineHeight = '20px';
   button.style.whiteSpace = 'nowrap';
   button.style.color = '#000';
-  button.style.fontFamily = 'Jost, sans-serif';
-  button.style.fontStyle = 'italic';
+  button.style.fontFamily = 'Libre Baskerville, serif';
   button.style.fontWeight = '800';
-  button.style.fontSize = '15px';
-  button.innerText = 'ENTER TO WIN';
+  button.style.fontSize = '14px';
+  button.style.textAlign = 'center';
+  button.innerText = isMobile
+    ? 'Enter to win prizes!'
+    : 'Enter to win 4 Sun Catchers of your choice';
   button.style.width = '100%';
   button.style.display = 'flex';
   button.style.justifyContent = 'center';
+  button.style.paddingRight = '30px';
   button.style.alignItems = 'center';
   button.style.gap = '10px';
   createCloseWidgetButton({ button, hideIframeContainer, setIsIframeRendered });
@@ -175,9 +184,25 @@ const handleButton = ({ container }) => {
     e.preventDefault();
     if (isIframeRendered) {
       hideIframeContainer(container);
+      button.innerText = isMobile
+        ? 'Enter to win prizes!'
+        : 'Enter to win 4 Sun Catchers of your choice';
+
+      button.style.width = isMobile ? '250px' : '380px';
+      button.style.left = 'calc(100% - 475px)';
+      button.style.paddingRight = '30px';
+      createCloseWidgetButton({
+        button,
+        hideIframeContainer,
+        setIsIframeRendered,
+      });
     } else {
       const iframe = document.querySelector('#drops-widget-iframe');
       if (iframe) {
+        button.innerText = 'Take me back to the shop';
+        button.style.width = '250px';
+        button.style.left = 'calc(100% - 280px)';
+        button.style.paddingRight = '0px';
         container.style.display = 'block';
         container.style.zIndex = 100;
         document.body.style.overflow = 'hidden';
@@ -204,8 +229,20 @@ const renderWidget = () => {
   renderIframe(url, container);
   document.head.insertAdjacentHTML(
     'beforeend',
-    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
+    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">'
   );
+  const origin = new URL(url).origin;
+
+  window.addEventListener('message', (event) => {
+    if (origin !== event?.origin) return;
+    if (event?.data?.type === 'drops_instagram_connect' && event?.data?.url) {
+      let newWindow = window.open();
+      newWindow.location.href = `${origin}/redirect-to?url=${encodeURI(
+        event.data.url
+      )}#dropsToken=${event?.data?.dropsToken}`;
+    }
+  });
+
   setTimeout(() => {
     handleButton({ container });
   }, 1000);
