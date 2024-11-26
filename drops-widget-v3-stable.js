@@ -189,7 +189,10 @@ const handleButton = ({ container }) => {
         : 'Enter to win 4 Sun Catchers of your choice';
 
       button.style.width = isMobile ? '250px' : '380px';
-      button.style.left = 'calc(100% - 475px)';
+      button.style.left = isMobile
+        ? 'calc(100% - 345px)'
+        : 'calc(100% - 475px)';
+
       button.style.paddingRight = '30px';
       createCloseWidgetButton({
         button,
