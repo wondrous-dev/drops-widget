@@ -182,12 +182,19 @@ const handleButton = ({ container }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
+    let chatApp = document.querySelector('chat-app');
+
     if (isIframeRendered) {
+      if (chatApp) {
+        chatApp.style.display = 'block';
+      }
       hideIframeContainer(container);
       button.innerText = isMobile
         ? 'Enter to win prizes!'
         : 'Enter to win 4 Sun Catchers of your choice';
-
+      button.style.fontSize = '14px';
+      button.style.height = '68px';
+      button.style.top = 'calc(100% - 90px)';
       button.style.width = isMobile ? '250px' : '380px';
       button.style.left = isMobile
         ? 'calc(100% - 345px)'
@@ -202,9 +209,24 @@ const handleButton = ({ container }) => {
     } else {
       const iframe = document.querySelector('#drops-widget-iframe');
       if (iframe) {
-        button.innerText = 'Take me back to the shop';
-        button.style.width = '250px';
-        button.style.left = 'calc(100% - 280px)';
+        if (chatApp) {
+          chatApp.style.display = 'none';
+        }
+        button.innerText = isMobile ? 'ⓧ' : 'Take me back to the shop';
+        button.style.width = isMobile ? '44px' : '250px';
+        button.style.left = isMobile
+          ? 'calc(100% - 100px)'
+          : 'calc(100% - 280px)';
+        button.style.height = isMobile ? '44px' : '68px';
+        button.style.fontSize = isMobile ? '24px' : '14px';
+        
+        button.style.top = isMobile
+          ? 'calc(100% - 170px)'
+          : 'calc(100% - 90px)';
+        button.style.left = isMobile
+          ? 'calc(100% - 55px)'
+          : 'calc(100% - 280px)';
+        button.style.paddingLeft = '0px'
         button.style.paddingRight = '0px';
         container.style.display = 'block';
         container.style.zIndex = 100;
