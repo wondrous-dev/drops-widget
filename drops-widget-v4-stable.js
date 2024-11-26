@@ -61,7 +61,7 @@ const renderIframe = (url, container) => {
 
   iframe.src = url;
   container.style.width = '100vw';
-  container.style.height = '100vh';
+  container.style.height = '100dvh';
   iframe.style.width = '100%';
   iframe.style.height = '100%';
   iframe.style.border = 'none';
@@ -231,7 +231,7 @@ const handleButton = ({ container }) => {
         container.style.display = 'block';
         container.style.zIndex = 100;
         document.body.style.overflow = 'hidden';
-        document.body.style.height = '100vh';
+        document.body.style.height = '100dvh';
       }
     }
     isIframeRendered = !isIframeRendered;
