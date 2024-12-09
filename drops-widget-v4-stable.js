@@ -1,5 +1,18 @@
 const isMobile = window.innerWidth <= 768;
 
+const createPostHogScript = () => {
+  const posthogScript = document.createElement('script');
+  posthogScript.innerHTML = `
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_9rwob2cp20Q6vRE2opca3y4H23OitHNpgCHAoQM2WXw', {
+      api_host: 'https://us.i.posthog.com',
+      person_profiles: 'always'
+    });
+  `;
+  document.head.appendChild(posthogScript);
+  posthog.capture('widget_loaded');
+};
+
 const closeIcon = () => {
   const node = document.createElement('svg');
   node.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
@@ -72,6 +85,7 @@ const renderIframe = (url, container) => {
 const hideIframeContainer = (container) => {
   const iframe = document.querySelector('#drops-widget-iframe');
   if (iframe) {
+    posthog.capture('widget_closed');
     container.style.display = 'none';
     container.style.zIndex = 0;
     document.body.style.overflow = 'auto';
@@ -212,6 +226,7 @@ const handleButton = ({ container }) => {
         if (chatApp) {
           chatApp.style.display = 'none';
         }
+        posthog.capture('widget_opened');
         button.innerText = isMobile ? 'ⓧ' : 'Take me back to the shop';
         button.style.width = isMobile ? '44px' : '250px';
         button.style.left = isMobile
@@ -219,14 +234,14 @@ const handleButton = ({ container }) => {
           : 'calc(100% - 280px)';
         button.style.height = isMobile ? '44px' : '68px';
         button.style.fontSize = isMobile ? '24px' : '14px';
-        
+
         button.style.top = isMobile
           ? 'calc(100% - 170px)'
           : 'calc(100% - 90px)';
         button.style.left = isMobile
           ? 'calc(100% - 55px)'
           : 'calc(100% - 280px)';
-        button.style.paddingLeft = '0px'
+        button.style.paddingLeft = '0px';
         button.style.paddingRight = '0px';
         container.style.display = 'block';
         container.style.zIndex = 100;
@@ -243,7 +258,7 @@ const handleButton = ({ container }) => {
 
 const renderWidget = () => {
   const script = document.getElementById('drops-widget-script');
-
+  createPostHogScript();
   const container = document.createElement('div');
   container.style.overflow = 'hidden';
   container.id = 'drops-widget-container';
@@ -261,6 +276,7 @@ const renderWidget = () => {
   window.addEventListener('message', (event) => {
     if (origin !== event?.origin) return;
     if (event?.data?.type === 'drops_instagram_connect' && event?.data?.url) {
+      posthog.capture('instagram_connect_clicked');
       let newWindow = window.open();
       newWindow.location.href = `${origin}/redirect-to?url=${encodeURI(
         event.data.url
