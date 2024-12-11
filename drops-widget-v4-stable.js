@@ -85,7 +85,6 @@ const renderIframe = (url, container) => {
 const hideIframeContainer = (container) => {
   const iframe = document.querySelector('#drops-widget-iframe');
   if (iframe) {
-    posthog.capture('widget_closed');
     container.style.display = 'none';
     container.style.zIndex = 0;
     document.body.style.overflow = 'auto';
@@ -137,6 +136,7 @@ const createCloseWidgetButton = ({
       container.style.zIndex = 0;
       document.body.style.overflow = 'auto';
       document.body.style.height = 'auto';
+      posthog.capture('widget_dismissed');
       hideIframeContainer(container);
       setIsIframeRendered();
     }
@@ -190,6 +190,9 @@ const handleButton = ({ container }) => {
   });
 
   detectClickOutside(container, button, () => {
+    if (isIframeRendered && container?.style?.display === 'block') {
+      posthog.capture('widget_closed');
+    }
     isIframeRendered = !isIframeRendered;
     hideIframeContainer(container);
   });
@@ -202,6 +205,7 @@ const handleButton = ({ container }) => {
       if (chatApp) {
         chatApp.style.display = 'block';
       }
+      posthog.capture('widget_closed');
       hideIframeContainer(container);
       button.innerText = isMobile
         ? 'Enter to win prizes!'
