@@ -289,4 +289,5 @@ const renderWidget = () => {
   }, 1000);
 };
 
-renderWidget();
+// renderWidget();
+console.log('drops-widget-stable.js');
